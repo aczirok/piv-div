@@ -1,0 +1,49 @@
+#!/bin/bash
+export PATH=$PATH:/usr/local/bin:/mnt/data/prog/tiff/:/mnt/data/prog/tools
+
+# return the typical maximum stdandard deviation of the input images 
+# use: prog THR img1 img2 ... > number
+# process: 
+# (img --> stddev.img) --> histogram --> return value at the 'THR' ratio 
+# of the (cumulative) histogram
+
+
+pivd=16;	#PIV data grid spacing, pixels
+
+
+ph=$(echo ${pivd} | awk '{print $1 /2}')
+TMP=$(tempfile); rm $TMP; mkdir ${TMP}
+
+if [ "$#" == 0 ]; then 
+	echo "$0 threshold img1 img2 ... > number ";
+	exit
+fi;
+
+
+#cycle through input arguments:
+n=1
+for a in "$@"; do
+	if [ "$n" == "1" ]; then THR=$a;	# threshold for histogram
+	else 					# get stddev of images
+		imgstddev -w ${ph} -f $a -m |\
+		pnmsmooth -size 5 5 > ${TMP}/$(basename ${a}).std.pgm
+	fi;
+	n=$((n+1));
+done
+
+
+#calculate brightness value which is brighter than THR(*100%) of the pixels
+
+pnmcat -black -tb ${TMP}/*.std.pgm |\
+	pgmhist| tr "%" " " | tail -n +3 | \
+	awk -v th=${THR} 'BEGIN{s=0;
+	}{
+		v=$1; if (v>0) {c[v]=$2; sum[v]=c[v]+s; s+=c[v];} 
+	}END{k=-1; for (i=1;i<v;i++){
+		z=sum[i]/s; 
+		if (k<0 && z>th) k=i; };
+		print k}'
+
+rm -rf $TMP
+
+

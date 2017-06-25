@@ -1,0 +1,1 @@
+[ -f piv0ref.done ] || ( REF=$(cat ../ref); /mnt/data/meas/cmyo/prog/genMakePiv-Ref.py -i ../ORIG/ -c ../ORIG/*[_-]${REF}.[jp][pn]g -s piv0ref )

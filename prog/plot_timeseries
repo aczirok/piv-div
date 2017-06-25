@@ -1,0 +1,11 @@
+
+if [ -f $1 ] ; then
+	cat $1
+else
+	cat 
+fi | \
+if [ -f timestamp.txt ] ; then
+	gnuplot /mnt/data/meas/cmyo/prog/timeseries.gnu
+else
+	gnuplot /mnt/data/meas/cmyo/prog/mean.gnu
+fi
