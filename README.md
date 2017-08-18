@@ -1,8 +1,14 @@
 # piv-div
 
 This code is used to extract divergence/convergence measures from optical flow
-data.
+data.This code is used to extract divergence/convergence measures from optical flow data.
 
+### SETUP ###
+
+* Dependency: 
+  * Python 2.7
+
+### USAGE ###
 * for test data, download the datasets posted at http://osf.io/2w63u
   * example.zip will extract into the example folder, containing
     * ORIG: the original image sequence
@@ -31,5 +37,34 @@ make -k div-w
     * frame_vs_mean.txt: spatial average displacement for each frame, calculated from consecutive images
     * frame_vs_mean_ref.txt: beat pattern: spatial average displacement for each frame, calculated with a single reference image 
     * frame_vs_mean_ref_corr.txt: phase corrected beat pattern (different only if the reference frame is in a contraction peak instead of being within the resting state)
+    
+### FILES ###
+
+* Makefiles:
+  * piv-cont.make - directives to calculate the beat pattern from consecutive images
+  * path.make - directives about the location of the prog folder
+  * div.make - directives to calculate the divergence from the image sequence
+  * divw.make - directives to calculate contrast-weighted divergences 
+
+* Bash scripts:
+  * divergence-map.sh - visualize  divergence data as an image
+  * divergence-map-w.sh - visualize contrast-weighted divergence data as an image
+  * divergence-map-w-overlay.sh - visualize contrast-weighted divergence data superimposed on one of the original image
+  * piv-w - assign weights to PIV data based on the local standard deviation of the images used to calculate the PIV data
+  * piv-w-norm - calculate the weight of each pixel
+  * plot_timeseries - generates the beat pattern graph. If exact timestamps / framerates are not given, a 10 fps (frame per second) frame rate is assumed.
+
+* Python scripts:
+  * sum.py - Calculates the average displacement from a field of PIV displacements.
+  * piv0corr.py - Baseline correction. Estimates displacements using each minima of the piv0 files as a reference state. Calculations usually are limited only to the first 500 frames
+  * divergence.py - Calculates divergence from a file containing the PIV displacement data.
+  * weightedDiv.py - Adds weight to divergence data
+  * pixlist.py - Calculates the list of all pixels, for the "piv-w" bash script.
+  * filter.py - Filters divergence files to reduce noise. Possible choices: median, highpass, stdev, avg, search for reversed pixels.
+  * mergeReversedDivW.py - Correction of reversed divergence. An area can beat off phase and this file will detect and correct that.
+
+* Gnuplot Visualization:
+  * mean.gnu - Generates a beat pattern graph if exact timestamps are not given for each image. A 10 fps (frame per second) frame rate is assumed.
+
 
 
