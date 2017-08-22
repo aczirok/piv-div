@@ -1,7 +1,7 @@
 # piv-div
 
 This code is used to extract divergence/convergence measures from optical flow
-data.This code is used to extract divergence/convergence measures from optical flow data.
+data.
 
 ### SETUP ###
 
