@@ -4,4 +4,4 @@ if [ -f $1 ] ; then
 else
 	cat 
 fi | \
-gnuplot /mnt/data/meas/cmyo/prog/mean.gnu
+gnuplot $(dirname $0)/mean.gnu
