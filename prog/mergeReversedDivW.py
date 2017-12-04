@@ -5,8 +5,6 @@ import os
 import sys
 import argparse
 import numpy as np
-from scipy.fftpack import rfft
-import cmath
 
 rev = []		# reversed txt
 
